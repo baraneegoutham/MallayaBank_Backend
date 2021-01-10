@@ -72,6 +72,14 @@ namespace Banking.Controllers
             {
                 using (BankingDbEntities db = new BankingDbEntities())
                 {
+                    var acc = db.UsersAccounts.Where(a => a.Account_Number == id).First();
+                    int accno = acc.Account_Number;
+                    var data = db.Beneficiaries.Where(a => a.Holder_Account_Number == accno);
+                    foreach (var i in data)
+                    {
+                        if (i.Beneficiary_Account_Number == d.Beneficiary_Account_Number)
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Benificiary: " + d.Beneficiary_Account_Number + " already exists");
+                    }
                     d.Holder_Account_Number = id;
                     db.Beneficiaries.Add(d);
                     db.SaveChanges();

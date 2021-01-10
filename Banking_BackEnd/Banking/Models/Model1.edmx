@@ -4,13 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BankingDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'BankingDb.dbo.AccountLocked' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      <Schema Namespace="BankingDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccountLocked">
-          <Property Name="Account_Number" Type="int" />
+          <Key>
+            <PropertyRef Name="Serial_Number" />
+          </Key>
+          <Property Name="Serial_Number" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Customer_Id" Type="int" />
-        </EntityType>-->
+        </EntityType>
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_Id" />
@@ -22,13 +23,14 @@ warning 6013: The table/view 'BankingDb.dbo.AccountLocked' does not have a prima
         </EntityType>
         <EntityType Name="Beneficiary">
           <Key>
-            <PropertyRef Name="Beneficiary_Account_Number" />
+            <PropertyRef Name="beniid" />
           </Key>
           <Property Name="Beneficiary_Name" Type="varchar" MaxLength="40" />
           <Property Name="Beneficiary_Account_Number" Type="int" Nullable="false" />
           <Property Name="Holder_Account_Number" Type="int" />
           <Property Name="Save_Status" Type="varchar" MaxLength="6" />
           <Property Name="Nick_Name" Type="varchar" MaxLength="30" />
+          <Property Name="beniid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Transactions">
           <Key>
@@ -94,9 +96,6 @@ warning 6013: The table/view 'BankingDb.dbo.AccountLocked' does not have a prima
           <Property Name="Reference_Id" Type="int" />
           <Property Name="Otp" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relationship, but cannot be found.
-        <Association Name="FK__AccountLo__Accou__1A14E395" />-->
         <Association Name="FK__Transacti__From___1FCDBCEB">
           <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -108,18 +107,6 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
             </Principal>
             <Dependent Role="Transactions">
               <PropertyRef Name="From_Account_Number" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Transacti__To_Ac__20C1E124">
-          <End Role="Beneficiary" Type="Self.Beneficiary" Multiplicity="0..1" />
-          <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Beneficiary">
-              <PropertyRef Name="Beneficiary_Account_Number" />
-            </Principal>
-            <Dependent Role="Transactions">
-              <PropertyRef Name="To_Account_Number" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -138,6 +125,7 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BankingDbModelStoreContainer">
+          <EntitySet Name="AccountLocked" EntityType="Self.AccountLocked" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Beneficiary" EntityType="Self.Beneficiary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
@@ -147,19 +135,57 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
             <End Role="UsersAccount" EntitySet="UsersAccount" />
             <End Role="Transactions" EntitySet="Transactions" />
           </AssociationSet>
-          <AssociationSet Name="FK__Transacti__To_Ac__20C1E124" Association="Self.FK__Transacti__To_Ac__20C1E124">
-            <End Role="Beneficiary" EntitySet="Beneficiary" />
-            <End Role="Transactions" EntitySet="Transactions" />
-          </AssociationSet>
           <AssociationSet Name="FK__UsersAcco__Refer__182C9B23" Association="Self.FK__UsersAcco__Refer__182C9B23">
             <End Role="UserDetails" EntitySet="UserDetails" />
             <End Role="UsersAccount" EntitySet="UsersAccount" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BankingDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccountLocked">
+          <Key>
+            <PropertyRef Name="Serial_Number" />
+          </Key>
+          <Property Name="Serial_Number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customer_Id" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_Id" />
+          </Key>
+          <Property Name="Admin_Id" Type="Int32" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Mobile_Number" Type="Int32" Nullable="false" />
+          <Property Name="Email_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Beneficiary">
+          <Key>
+            <PropertyRef Name="beniid" />
+          </Key>
+          <Property Name="Beneficiary_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Beneficiary_Account_Number" Type="Int32" Nullable="false" />
+          <Property Name="Holder_Account_Number" Type="Int32" />
+          <Property Name="Save_Status" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Nick_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="beniid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Transaction_Id" />
+          </Key>
+          <Property Name="Transaction_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="From_Account_Number" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="To_Account_Number" Type="Int32" />
+          <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Maturity_Instructions" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Transaction_Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="UsersAccount" Relationship="Self.FK__Transacti__From___1FCDBCEB" FromRole="Transactions" ToRole="UsersAccount" />
+        </EntityType>
         <EntityType Name="UserDetail">
           <Key>
             <PropertyRef Name="Reference_ID" />
@@ -193,28 +219,9 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
           <Property Name="Net_banking" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="Account_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Approval_Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="UsersAccounts" Relationship="BankingDbModel.FK__UsersAcco__Refer__7073AF84" FromRole="UserDetail" ToRole="UsersAccount" />
           <Property Name="same" Type="Boolean" />
+          <NavigationProperty Name="UsersAccounts" Relationship="Self.FK__UsersAcco__Refer__182C9B23" FromRole="UserDetails" ToRole="UsersAccount" />
         </EntityType>
-        <EntityContainer Name="BankingDbEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
-          <EntitySet Name="UsersAccounts" EntityType="BankingDbModel.UsersAccount" />
-          <AssociationSet Name="FK__UsersAcco__Refer__7073AF84" Association="BankingDbModel.FK__UsersAcco__Refer__7073AF84">
-            <End Role="UserDetail" EntitySet="UserDetails" />
-            <End Role="UsersAccount" EntitySet="UsersAccounts" />
-          </AssociationSet>
-          <EntitySet Name="Admins" EntityType="BankingDbModel.Admin" />
-          <EntitySet Name="Beneficiaries" EntityType="BankingDbModel.Beneficiary" />
-          <EntitySet Name="Transactions" EntityType="BankingDbModel.Transaction" />
-          <AssociationSet Name="FK__Transacti__To_Ac__20C1E124" Association="BankingDbModel.FK__Transacti__To_Ac__20C1E124">
-            <End Role="Beneficiary" EntitySet="Beneficiaries" />
-            <End Role="Transaction" EntitySet="Transactions" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="BankingDbModel.FK__Transacti__From___1FCDBCEB">
-            <End Role="UsersAccount" EntitySet="UsersAccounts" />
-            <End Role="Transaction" EntitySet="Transactions" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="UsersAccount">
           <Key>
             <PropertyRef Name="Account_Number" />
@@ -230,16 +237,30 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
           <Property Name="Logout_Time" Type="Time" Precision="7" />
           <Property Name="Reference_Id" Type="Int32" />
           <Property Name="Otp" Type="Int32" />
-          <NavigationProperty Name="UserDetail" Relationship="BankingDbModel.FK__UsersAcco__Refer__7073AF84" FromRole="UsersAccount" ToRole="UserDetail" />
-          <NavigationProperty Name="Transactions" Relationship="BankingDbModel.FK__Transacti__From___1FCDBCEB" FromRole="UsersAccount" ToRole="Transaction" />
+          <NavigationProperty Name="Transactions" Relationship="Self.FK__Transacti__From___1FCDBCEB" FromRole="UsersAccount" ToRole="Transactions" />
+          <NavigationProperty Name="UserDetail" Relationship="Self.FK__UsersAcco__Refer__182C9B23" FromRole="UsersAccount" ToRole="UserDetails" />
         </EntityType>
-        <Association Name="FK__UsersAcco__Refer__7073AF84">
-          <End Type="BankingDbModel.UserDetail" Role="UserDetail" Multiplicity="0..1">
+        <Association Name="FK__Transacti__From___1FCDBCEB">
+          <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="BankingDbModel.UsersAccount" Role="UsersAccount" Multiplicity="*" />
+          <End Role="Transactions" Type="Self.Transaction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="UserDetail">
+            <Principal Role="UsersAccount">
+              <PropertyRef Name="Account_Number" />
+            </Principal>
+            <Dependent Role="Transactions">
+              <PropertyRef Name="From_Account_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsersAcco__Refer__182C9B23">
+          <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetails">
               <PropertyRef Name="Reference_ID" />
             </Principal>
             <Dependent Role="UsersAccount">
@@ -247,77 +268,75 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Admin">
-          <Key>
-            <PropertyRef Name="Admin_Id" />
-          </Key>
-          <Property Name="Admin_Id" Type="Int32" Nullable="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Mobile_Number" Type="Int32" Nullable="false" />
-          <Property Name="Email_Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Beneficiary">
-          <Key>
-            <PropertyRef Name="Beneficiary_Account_Number" />
-          </Key>
-          <Property Name="Beneficiary_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="Beneficiary_Account_Number" Type="Int32" Nullable="false" />
-          <Property Name="Holder_Account_Number" Type="Int32" />
-          <Property Name="Save_Status" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="Nick_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Transactions" Relationship="BankingDbModel.FK__Transacti__To_Ac__20C1E124" FromRole="Beneficiary" ToRole="Transaction" />
-        </EntityType>
-        <EntityType Name="Transaction">
-          <Key>
-            <PropertyRef Name="Transaction_Id" />
-          </Key>
-          <Property Name="Transaction_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="From_Account_Number" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="To_Account_Number" Type="Int32" />
-          <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Maturity_Instructions" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Remark" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Transaction_Date" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Beneficiary" Relationship="BankingDbModel.FK__Transacti__To_Ac__20C1E124" FromRole="Transaction" ToRole="Beneficiary" />
-          <NavigationProperty Name="UsersAccount" Relationship="BankingDbModel.FK__Transacti__From___1FCDBCEB" FromRole="Transaction" ToRole="UsersAccount" />
-        </EntityType>
-        <Association Name="FK__Transacti__To_Ac__20C1E124">
-          <End Type="BankingDbModel.Beneficiary" Role="Beneficiary" Multiplicity="0..1" />
-          <End Type="BankingDbModel.Transaction" Role="Transaction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Beneficiary">
-              <PropertyRef Name="Beneficiary_Account_Number" />
-            </Principal>
-            <Dependent Role="Transaction">
-              <PropertyRef Name="To_Account_Number" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Transacti__From___1FCDBCEB">
-          <End Type="BankingDbModel.UsersAccount" Role="UsersAccount" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="BankingDbModel.Transaction" Role="Transaction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UsersAccount">
-              <PropertyRef Name="Account_Number" />
-            </Principal>
-            <Dependent Role="Transaction">
-              <PropertyRef Name="From_Account_Number" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityContainer Name="BankingDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccountLockeds" EntityType="Self.AccountLocked" />
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="Beneficiaries" EntityType="Self.Beneficiary" />
+          <EntitySet Name="Transactions" EntityType="Self.Transaction" />
+          <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
+          <EntitySet Name="UsersAccounts" EntityType="Self.UsersAccount" />
+          <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="Self.FK__Transacti__From___1FCDBCEB">
+            <End Role="UsersAccount" EntitySet="UsersAccounts" />
+            <End Role="Transactions" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsersAcco__Refer__182C9B23" Association="Self.FK__UsersAcco__Refer__182C9B23">
+            <End Role="UserDetails" EntitySet="UserDetails" />
+            <End Role="UsersAccount" EntitySet="UsersAccounts" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="BankingDbModelStoreContainer" CdmEntityContainer="BankingDbEntities">
+          <EntitySetMapping Name="AccountLockeds">
+            <EntityTypeMapping TypeName="BankingDbModel.AccountLocked">
+              <MappingFragment StoreEntitySet="AccountLocked">
+                <ScalarProperty Name="Serial_Number" ColumnName="Serial_Number" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="BankingDbModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
+                <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Beneficiaries">
+            <EntityTypeMapping TypeName="BankingDbModel.Beneficiary">
+              <MappingFragment StoreEntitySet="Beneficiary">
+                <ScalarProperty Name="Beneficiary_Name" ColumnName="Beneficiary_Name" />
+                <ScalarProperty Name="Beneficiary_Account_Number" ColumnName="Beneficiary_Account_Number" />
+                <ScalarProperty Name="Holder_Account_Number" ColumnName="Holder_Account_Number" />
+                <ScalarProperty Name="Save_Status" ColumnName="Save_Status" />
+                <ScalarProperty Name="Nick_Name" ColumnName="Nick_Name" />
+                <ScalarProperty Name="beniid" ColumnName="beniid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="BankingDbModel.Transaction">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="Transaction_Id" ColumnName="Transaction_Id" />
+                <ScalarProperty Name="From_Account_Number" ColumnName="From_Account_Number" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="To_Account_Number" ColumnName="To_Account_Number" />
+                <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="Maturity_Instructions" ColumnName="Maturity_Instructions" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="UserDetails">
             <EntityTypeMapping TypeName="BankingDbModel.UserDetail">
               <MappingFragment StoreEntitySet="UserDetails">
-                <ScalarProperty Name="same" ColumnName="same" />
                 <ScalarProperty Name="Reference_ID" ColumnName="Reference_ID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="First_Name" ColumnName="First_Name" />
@@ -347,58 +366,24 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
                 <ScalarProperty Name="Net_banking" ColumnName="Net_banking" />
                 <ScalarProperty Name="Account_type" ColumnName="Account_type" />
                 <ScalarProperty Name="Approval_Status" ColumnName="Approval_Status" />
+                <ScalarProperty Name="same" ColumnName="same" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UsersAccounts">
             <EntityTypeMapping TypeName="BankingDbModel.UsersAccount">
               <MappingFragment StoreEntitySet="UsersAccount">
-                <ScalarProperty Name="Otp" ColumnName="Otp" />
-                <ScalarProperty Name="Reference_Id" ColumnName="Reference_Id" />
-                <ScalarProperty Name="Logout_Time" ColumnName="Logout_Time" />
-                <ScalarProperty Name="Login_Status" ColumnName="Login_Status" />
-                <ScalarProperty Name="Register_Internet_Banking" ColumnName="Register_Internet_Banking" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="Transaction_Password" ColumnName="Transaction_Password" />
-                <ScalarProperty Name="Login_Password" ColumnName="Login_Password" />
-                <ScalarProperty Name="Customername" ColumnName="Customername" />
-                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
                 <ScalarProperty Name="Account_Number" ColumnName="Account_Number" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Admins">
-            <EntityTypeMapping TypeName="BankingDbModel.Admin">
-              <MappingFragment StoreEntitySet="Admin">
-                <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
-                <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Beneficiaries">
-            <EntityTypeMapping TypeName="BankingDbModel.Beneficiary">
-              <MappingFragment StoreEntitySet="Beneficiary">
-                <ScalarProperty Name="Nick_Name" ColumnName="Nick_Name" />
-                <ScalarProperty Name="Save_Status" ColumnName="Save_Status" />
-                <ScalarProperty Name="Holder_Account_Number" ColumnName="Holder_Account_Number" />
-                <ScalarProperty Name="Beneficiary_Account_Number" ColumnName="Beneficiary_Account_Number" />
-                <ScalarProperty Name="Beneficiary_Name" ColumnName="Beneficiary_Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Transactions">
-            <EntityTypeMapping TypeName="BankingDbModel.Transaction">
-              <MappingFragment StoreEntitySet="Transactions">
-                <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
-                <ScalarProperty Name="Remark" ColumnName="Remark" />
-                <ScalarProperty Name="Maturity_Instructions" ColumnName="Maturity_Instructions" />
-                <ScalarProperty Name="Mode" ColumnName="Mode" />
-                <ScalarProperty Name="To_Account_Number" ColumnName="To_Account_Number" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="From_Account_Number" ColumnName="From_Account_Number" />
-                <ScalarProperty Name="Transaction_Id" ColumnName="Transaction_Id" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Customername" ColumnName="Customername" />
+                <ScalarProperty Name="Login_Password" ColumnName="Login_Password" />
+                <ScalarProperty Name="Transaction_Password" ColumnName="Transaction_Password" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Register_Internet_Banking" ColumnName="Register_Internet_Banking" />
+                <ScalarProperty Name="Login_Status" ColumnName="Login_Status" />
+                <ScalarProperty Name="Logout_Time" ColumnName="Logout_Time" />
+                <ScalarProperty Name="Reference_Id" ColumnName="Reference_Id" />
+                <ScalarProperty Name="Otp" ColumnName="Otp" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

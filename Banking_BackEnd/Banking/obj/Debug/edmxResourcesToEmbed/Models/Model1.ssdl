@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="BankingDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'BankingDb.dbo.AccountLocked' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="AccountLocked">
-          <Property Name="Account_Number" Type="int" />
-          <Property Name="Customer_Id" Type="int" />
-        </EntityType>-->
+  <EntityType Name="AccountLocked">
+    <Key>
+      <PropertyRef Name="Serial_Number" />
+    </Key>
+    <Property Name="Serial_Number" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_Id" Type="int" />
+  </EntityType>
   <EntityType Name="Admin">
     <Key>
       <PropertyRef Name="Admin_Id" />
@@ -17,13 +18,14 @@ warning 6013: The table/view 'BankingDb.dbo.AccountLocked' does not have a prima
   </EntityType>
   <EntityType Name="Beneficiary">
     <Key>
-      <PropertyRef Name="Beneficiary_Account_Number" />
+      <PropertyRef Name="beniid" />
     </Key>
     <Property Name="Beneficiary_Name" Type="varchar" MaxLength="40" />
     <Property Name="Beneficiary_Account_Number" Type="int" Nullable="false" />
     <Property Name="Holder_Account_Number" Type="int" />
     <Property Name="Save_Status" Type="varchar" MaxLength="6" />
     <Property Name="Nick_Name" Type="varchar" MaxLength="30" />
+    <Property Name="beniid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
   <EntityType Name="Transactions">
     <Key>
@@ -89,9 +91,6 @@ warning 6013: The table/view 'BankingDb.dbo.AccountLocked' does not have a prima
     <Property Name="Reference_Id" Type="int" />
     <Property Name="Otp" Type="int" />
   </EntityType>
-  <!--Errors Found During Generation:
-error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relationship, but cannot be found.
-        <Association Name="FK__AccountLo__Accou__1A14E395" />-->
   <Association Name="FK__Transacti__From___1FCDBCEB">
     <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -103,18 +102,6 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
       </Principal>
       <Dependent Role="Transactions">
         <PropertyRef Name="From_Account_Number" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Transacti__To_Ac__20C1E124">
-    <End Role="Beneficiary" Type="Self.Beneficiary" Multiplicity="0..1" />
-    <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Beneficiary">
-        <PropertyRef Name="Beneficiary_Account_Number" />
-      </Principal>
-      <Dependent Role="Transactions">
-        <PropertyRef Name="To_Account_Number" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -133,6 +120,7 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="BankingDbModelStoreContainer">
+    <EntitySet Name="AccountLocked" EntityType="Self.AccountLocked" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Beneficiary" EntityType="Self.Beneficiary" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
@@ -140,10 +128,6 @@ error 6004: The table 'BankingDb.dbo.AccountLocked' is referenced by a relations
     <EntitySet Name="UsersAccount" EntityType="Self.UsersAccount" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="Self.FK__Transacti__From___1FCDBCEB">
       <End Role="UsersAccount" EntitySet="UsersAccount" />
-      <End Role="Transactions" EntitySet="Transactions" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Transacti__To_Ac__20C1E124" Association="Self.FK__Transacti__To_Ac__20C1E124">
-      <End Role="Beneficiary" EntitySet="Beneficiary" />
       <End Role="Transactions" EntitySet="Transactions" />
     </AssociationSet>
     <AssociationSet Name="FK__UsersAcco__Refer__182C9B23" Association="Self.FK__UsersAcco__Refer__182C9B23">

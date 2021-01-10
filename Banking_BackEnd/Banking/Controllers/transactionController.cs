@@ -12,6 +12,7 @@ namespace Banking.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class transactionController : ApiController
     {
+        
         public HttpResponseMessage GetUs(string id)
         {
             var data = id.Split(',');
@@ -20,14 +21,15 @@ namespace Banking.Controllers
             DateTime finish = Convert.ToDateTime(data[2]);
             using (BankingDbEntities db = new BankingDbEntities())
             {
-                var accounts = db.Transactions.Where(a => a.From_Account_Number == acc).ToList();
-                List<Transaction> t = new List<Transaction>();
-                foreach (var i in accounts)
-                {
-                    if (i.Transaction_Date >= start && i.Transaction_Date <= finish)
-                        t.Add(i);
-                }
-                return Request.CreateResponse(HttpStatusCode.OK, t);
+
+                    var accounts = db.Transactions.Where(a => a.From_Account_Number == acc).ToList();
+                    List<Transaction> t = new List<Transaction>();
+                    foreach (var i in accounts)
+                    {
+                        if (i.Transaction_Date >= start && i.Transaction_Date <= finish)
+                            t.Add(i);
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, t);
             }
         }
 
@@ -89,7 +91,7 @@ namespace Banking.Controllers
                     d.From_Account_Number = id;
                     d.Transaction_Date = DateTime.Now;
                     var data = db.UsersAccounts.Find(id);
-                    if (d.Amount > data.Balance)
+                    if (d.Amount > data.Balance || data.Balance == null)
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Insufficient fund");
                     else
                     {

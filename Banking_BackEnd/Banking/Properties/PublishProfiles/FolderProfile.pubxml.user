@@ -8,10 +8,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Banking.dll">
-      <publishTime>01/10/2021 16:01:27</publishTime>
+      <publishTime>01/11/2021 00:49:32</publishTime>
     </File>
     <File Include="bin/Banking.pdb">
-      <publishTime>01/10/2021 16:01:27</publishTime>
+      <publishTime>01/11/2021 00:49:32</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/09/2021 11:01:30</publishTime>
@@ -191,10 +191,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/09/2021 11:01:29</publishTime>
     </File>
     <File Include="Models/Model1.edmx.diagram">
-      <publishTime>01/10/2021 12:22:45</publishTime>
+      <publishTime>01/10/2021 21:25:00</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/10/2021 16:01:35</publishTime>
+      <publishTime>01/10/2021 21:29:18</publishTime>
     </File>
   </ItemGroup>
 </Project>

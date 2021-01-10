@@ -23,7 +23,6 @@ namespace Banking.Models
         public string Remark { get; set; }
         public Nullable<System.DateTime> Transaction_Date { get; set; }
     
-        public Beneficiary Beneficiary { get; set; }
         public UsersAccount UsersAccount { get; set; }
     }
 }

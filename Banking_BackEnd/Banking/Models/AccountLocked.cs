@@ -12,13 +12,9 @@ namespace Banking.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Beneficiary
+    public partial class AccountLocked
     {
-        public string Beneficiary_Name { get; set; }
-        public int Beneficiary_Account_Number { get; set; }
-        public Nullable<int> Holder_Account_Number { get; set; }
-        public string Save_Status { get; set; }
-        public string Nick_Name { get; set; }
-        public int beniid { get; set; }
+        public int Serial_Number { get; set; }
+        public Nullable<int> Customer_Id { get; set; }
     }
 }

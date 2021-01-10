@@ -12,6 +12,30 @@ namespace Banking.Controllers
     [EnableCors(origins:"*",headers:"*",methods:"*")]
     public class UserDetailController : ApiController
     {
+        public HttpResponseMessage GetFetch(int id)
+        {
+            using (BankingDbEntities ad = new BankingDbEntities())
+            {
+                List<UserDetail> d = new List<UserDetail>();
+                var cd = ad.UsersAccounts.Where(a => a.Customer_Id == id).First();
+                var refid = cd.Reference_Id;
+                string yesno = "no";
+                var data = ad.UserDetails.Where(a => a.Net_banking == "YES");
+                foreach (var i in data)
+                {
+                    if (i.Reference_ID == refid)
+                    {
+                        yesno = "yes";
+                        break;
+                    }
+                }
+                if (yesno == "yes")
+                    return Request.CreateResponse(HttpStatusCode.OK, "YES");
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "NO");
+            }
+
+        }
 
         public HttpResponseMessage GetDetails()
         {

@@ -1,5 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="BankingDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AccountLocked">
+    <Key>
+      <PropertyRef Name="Serial_Number" />
+    </Key>
+    <Property Name="Serial_Number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="Admin_Id" />
+    </Key>
+    <Property Name="Admin_Id" Type="Int32" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Mobile_Number" Type="Int32" Nullable="false" />
+    <Property Name="Email_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Beneficiary">
+    <Key>
+      <PropertyRef Name="beniid" />
+    </Key>
+    <Property Name="Beneficiary_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="Beneficiary_Account_Number" Type="Int32" Nullable="false" />
+    <Property Name="Holder_Account_Number" Type="Int32" />
+    <Property Name="Save_Status" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="Nick_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="beniid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Transaction">
+    <Key>
+      <PropertyRef Name="Transaction_Id" />
+    </Key>
+    <Property Name="Transaction_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="From_Account_Number" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="To_Account_Number" Type="Int32" />
+    <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Maturity_Instructions" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Remark" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Transaction_Date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="UsersAccount" Relationship="Self.FK__Transacti__From___1FCDBCEB" FromRole="Transactions" ToRole="UsersAccount" />
+  </EntityType>
   <EntityType Name="UserDetail">
     <Key>
       <PropertyRef Name="Reference_ID" />
@@ -33,28 +74,9 @@
     <Property Name="Net_banking" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
     <Property Name="Account_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Approval_Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="UsersAccounts" Relationship="BankingDbModel.FK__UsersAcco__Refer__7073AF84" FromRole="UserDetail" ToRole="UsersAccount" />
     <Property Name="same" Type="Boolean" />
+    <NavigationProperty Name="UsersAccounts" Relationship="Self.FK__UsersAcco__Refer__182C9B23" FromRole="UserDetails" ToRole="UsersAccount" />
   </EntityType>
-  <EntityContainer Name="BankingDbEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
-    <EntitySet Name="UsersAccounts" EntityType="BankingDbModel.UsersAccount" />
-    <AssociationSet Name="FK__UsersAcco__Refer__7073AF84" Association="BankingDbModel.FK__UsersAcco__Refer__7073AF84">
-      <End Role="UserDetail" EntitySet="UserDetails" />
-      <End Role="UsersAccount" EntitySet="UsersAccounts" />
-    </AssociationSet>
-    <EntitySet Name="Admins" EntityType="BankingDbModel.Admin" />
-    <EntitySet Name="Beneficiaries" EntityType="BankingDbModel.Beneficiary" />
-    <EntitySet Name="Transactions" EntityType="BankingDbModel.Transaction" />
-    <AssociationSet Name="FK__Transacti__To_Ac__20C1E124" Association="BankingDbModel.FK__Transacti__To_Ac__20C1E124">
-      <End Role="Beneficiary" EntitySet="Beneficiaries" />
-      <End Role="Transaction" EntitySet="Transactions" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="BankingDbModel.FK__Transacti__From___1FCDBCEB">
-      <End Role="UsersAccount" EntitySet="UsersAccounts" />
-      <End Role="Transaction" EntitySet="Transactions" />
-    </AssociationSet>
-  </EntityContainer>
   <EntityType Name="UsersAccount">
     <Key>
       <PropertyRef Name="Account_Number" />
@@ -70,16 +92,30 @@
     <Property Name="Logout_Time" Type="Time" Precision="7" />
     <Property Name="Reference_Id" Type="Int32" />
     <Property Name="Otp" Type="Int32" />
-    <NavigationProperty Name="UserDetail" Relationship="BankingDbModel.FK__UsersAcco__Refer__7073AF84" FromRole="UsersAccount" ToRole="UserDetail" />
-    <NavigationProperty Name="Transactions" Relationship="BankingDbModel.FK__Transacti__From___1FCDBCEB" FromRole="UsersAccount" ToRole="Transaction" />
+    <NavigationProperty Name="Transactions" Relationship="Self.FK__Transacti__From___1FCDBCEB" FromRole="UsersAccount" ToRole="Transactions" />
+    <NavigationProperty Name="UserDetail" Relationship="Self.FK__UsersAcco__Refer__182C9B23" FromRole="UsersAccount" ToRole="UserDetails" />
   </EntityType>
-  <Association Name="FK__UsersAcco__Refer__7073AF84">
-    <End Type="BankingDbModel.UserDetail" Role="UserDetail" Multiplicity="0..1">
+  <Association Name="FK__Transacti__From___1FCDBCEB">
+    <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="BankingDbModel.UsersAccount" Role="UsersAccount" Multiplicity="*" />
+    <End Role="Transactions" Type="Self.Transaction" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="UserDetail">
+      <Principal Role="UsersAccount">
+        <PropertyRef Name="Account_Number" />
+      </Principal>
+      <Dependent Role="Transactions">
+        <PropertyRef Name="From_Account_Number" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UsersAcco__Refer__182C9B23">
+    <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetails">
         <PropertyRef Name="Reference_ID" />
       </Principal>
       <Dependent Role="UsersAccount">
@@ -87,65 +123,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Admin">
-    <Key>
-      <PropertyRef Name="Admin_Id" />
-    </Key>
-    <Property Name="Admin_Id" Type="Int32" Nullable="false" />
-    <Property Name="Password" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Mobile_Number" Type="Int32" Nullable="false" />
-    <Property Name="Email_Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="Beneficiary">
-    <Key>
-      <PropertyRef Name="Beneficiary_Account_Number" />
-    </Key>
-    <Property Name="Beneficiary_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-    <Property Name="Beneficiary_Account_Number" Type="Int32" Nullable="false" />
-    <Property Name="Holder_Account_Number" Type="Int32" />
-    <Property Name="Save_Status" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-    <Property Name="Nick_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Transactions" Relationship="BankingDbModel.FK__Transacti__To_Ac__20C1E124" FromRole="Beneficiary" ToRole="Transaction" />
-  </EntityType>
-  <EntityType Name="Transaction">
-    <Key>
-      <PropertyRef Name="Transaction_Id" />
-    </Key>
-    <Property Name="Transaction_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="From_Account_Number" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="To_Account_Number" Type="Int32" />
-    <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Maturity_Instructions" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="Remark" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="Transaction_Date" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="Beneficiary" Relationship="BankingDbModel.FK__Transacti__To_Ac__20C1E124" FromRole="Transaction" ToRole="Beneficiary" />
-    <NavigationProperty Name="UsersAccount" Relationship="BankingDbModel.FK__Transacti__From___1FCDBCEB" FromRole="Transaction" ToRole="UsersAccount" />
-  </EntityType>
-  <Association Name="FK__Transacti__To_Ac__20C1E124">
-    <End Type="BankingDbModel.Beneficiary" Role="Beneficiary" Multiplicity="0..1" />
-    <End Type="BankingDbModel.Transaction" Role="Transaction" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Beneficiary">
-        <PropertyRef Name="Beneficiary_Account_Number" />
-      </Principal>
-      <Dependent Role="Transaction">
-        <PropertyRef Name="To_Account_Number" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Transacti__From___1FCDBCEB">
-    <End Type="BankingDbModel.UsersAccount" Role="UsersAccount" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="BankingDbModel.Transaction" Role="Transaction" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UsersAccount">
-        <PropertyRef Name="Account_Number" />
-      </Principal>
-      <Dependent Role="Transaction">
-        <PropertyRef Name="From_Account_Number" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
+  <EntityContainer Name="BankingDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AccountLockeds" EntityType="Self.AccountLocked" />
+    <EntitySet Name="Admins" EntityType="Self.Admin" />
+    <EntitySet Name="Beneficiaries" EntityType="Self.Beneficiary" />
+    <EntitySet Name="Transactions" EntityType="Self.Transaction" />
+    <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
+    <EntitySet Name="UsersAccounts" EntityType="Self.UsersAccount" />
+    <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="Self.FK__Transacti__From___1FCDBCEB">
+      <End Role="UsersAccount" EntitySet="UsersAccounts" />
+      <End Role="Transactions" EntitySet="Transactions" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UsersAcco__Refer__182C9B23" Association="Self.FK__UsersAcco__Refer__182C9B23">
+      <End Role="UserDetails" EntitySet="UserDetails" />
+      <End Role="UsersAccount" EntitySet="UsersAccounts" />
+    </AssociationSet>
+  </EntityContainer>
 </Schema>

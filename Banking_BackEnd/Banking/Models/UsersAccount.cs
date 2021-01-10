@@ -32,8 +32,8 @@ namespace Banking.Models
         public Nullable<int> Reference_Id { get; set; }
         public Nullable<int> Otp { get; set; }
     
-        public UserDetail UserDetail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<Transaction> Transactions { get; set; }
+        public UserDetail UserDetail { get; set; }
     }
 }
