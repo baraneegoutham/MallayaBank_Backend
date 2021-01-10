@@ -27,5 +27,8 @@ namespace Banking.Models
     
         public virtual DbSet<UserDetail> UserDetails { get; set; }
         public virtual DbSet<UsersAccount> UsersAccounts { get; set; }
+        public virtual DbSet<Admin> Admins { get; set; }
+        public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
     }
 }

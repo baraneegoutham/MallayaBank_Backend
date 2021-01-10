@@ -4,6 +4,7 @@
     <EntitySetMapping Name="UserDetails">
       <EntityTypeMapping TypeName="BankingDbModel.UserDetail">
         <MappingFragment StoreEntitySet="UserDetails">
+          <ScalarProperty Name="same" ColumnName="same" />
           <ScalarProperty Name="Reference_ID" ColumnName="Reference_ID" />
           <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="First_Name" ColumnName="First_Name" />
@@ -50,6 +51,41 @@
           <ScalarProperty Name="Customername" ColumnName="Customername" />
           <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
           <ScalarProperty Name="Account_Number" ColumnName="Account_Number" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Admins">
+      <EntityTypeMapping TypeName="BankingDbModel.Admin">
+        <MappingFragment StoreEntitySet="Admin">
+          <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
+          <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Beneficiaries">
+      <EntityTypeMapping TypeName="BankingDbModel.Beneficiary">
+        <MappingFragment StoreEntitySet="Beneficiary">
+          <ScalarProperty Name="Nick_Name" ColumnName="Nick_Name" />
+          <ScalarProperty Name="Save_Status" ColumnName="Save_Status" />
+          <ScalarProperty Name="Holder_Account_Number" ColumnName="Holder_Account_Number" />
+          <ScalarProperty Name="Beneficiary_Account_Number" ColumnName="Beneficiary_Account_Number" />
+          <ScalarProperty Name="Beneficiary_Name" ColumnName="Beneficiary_Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Transactions">
+      <EntityTypeMapping TypeName="BankingDbModel.Transaction">
+        <MappingFragment StoreEntitySet="Transactions">
+          <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Maturity_Instructions" ColumnName="Maturity_Instructions" />
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="To_Account_Number" ColumnName="To_Account_Number" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="From_Account_Number" ColumnName="From_Account_Number" />
+          <ScalarProperty Name="Transaction_Id" ColumnName="Transaction_Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -36,6 +36,7 @@ namespace Banking.Controllers
             }
 
         }
+        [HttpPut]
         public HttpResponseMessage PutRegister(int id, [FromBody] UsersAccount register)
         {
             try

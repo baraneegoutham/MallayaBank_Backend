@@ -49,6 +49,7 @@ namespace Banking.Models
         public string Net_banking { get; set; }
         public string Account_type { get; set; }
         public string Approval_Status { get; set; }
+        public Nullable<bool> same { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<UsersAccount> UsersAccounts { get; set; }

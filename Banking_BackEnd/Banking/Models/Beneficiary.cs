@@ -12,27 +12,20 @@ namespace Banking.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UsersAccount
+    public partial class Beneficiary
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UsersAccount()
+        public Beneficiary()
         {
             this.Transactions = new HashSet<Transaction>();
         }
     
-        public int Account_Number { get; set; }
-        public Nullable<int> Customer_Id { get; set; }
-        public string Customername { get; set; }
-        public string Login_Password { get; set; }
-        public string Transaction_Password { get; set; }
-        public Nullable<decimal> Balance { get; set; }
-        public string Register_Internet_Banking { get; set; }
-        public string Login_Status { get; set; }
-        public Nullable<System.TimeSpan> Logout_Time { get; set; }
-        public Nullable<int> Reference_Id { get; set; }
-        public Nullable<int> Otp { get; set; }
+        public string Beneficiary_Name { get; set; }
+        public int Beneficiary_Account_Number { get; set; }
+        public Nullable<int> Holder_Account_Number { get; set; }
+        public string Save_Status { get; set; }
+        public string Nick_Name { get; set; }
     
-        public UserDetail UserDetail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<Transaction> Transactions { get; set; }
     }
