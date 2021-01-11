@@ -34,6 +34,7 @@
     <EntitySetMapping Name="Transactions">
       <EntityTypeMapping TypeName="BankingDbModel.Transaction">
         <MappingFragment StoreEntitySet="Transactions">
+          <ScalarProperty Name="balance" ColumnName="balance" />
           <ScalarProperty Name="Transaction_Id" ColumnName="Transaction_Id" />
           <ScalarProperty Name="From_Account_Number" ColumnName="From_Account_Number" />
           <ScalarProperty Name="Amount" ColumnName="Amount" />
@@ -83,6 +84,7 @@
     <EntitySetMapping Name="UsersAccounts">
       <EntityTypeMapping TypeName="BankingDbModel.UsersAccount">
         <MappingFragment StoreEntitySet="UsersAccount">
+          <ScalarProperty Name="Attemp" ColumnName="Attemp" />
           <ScalarProperty Name="Account_Number" ColumnName="Account_Number" />
           <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
           <ScalarProperty Name="Customername" ColumnName="Customername" />

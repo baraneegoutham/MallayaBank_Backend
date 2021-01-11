@@ -91,6 +91,7 @@ namespace Banking.Controllers
                     d.From_Account_Number = id;
                     d.Transaction_Date = DateTime.Now;
                     var data = db.UsersAccounts.Find(id);
+                    d.balance = data.Balance - d.Amount;
                     if (d.Amount > data.Balance || data.Balance == null)
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Insufficient fund");
                     else

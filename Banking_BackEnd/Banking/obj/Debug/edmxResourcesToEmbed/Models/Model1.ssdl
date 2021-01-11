@@ -34,11 +34,12 @@
     <Property Name="Transaction_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="From_Account_Number" Type="int" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="To_Account_Number" Type="bigint" />
+    <Property Name="To_Account_Number" Type="int" />
     <Property Name="Mode" Type="nvarchar" MaxLength="50" />
     <Property Name="Maturity_Instructions" Type="nvarchar" MaxLength="128" />
     <Property Name="Remark" Type="nvarchar" MaxLength="128" />
     <Property Name="Transaction_Date" Type="date" />
+    <Property Name="balance" Type="decimal" Precision="18" Scale="0" />
   </EntityType>
   <EntityType Name="UserDetails">
     <Key>
@@ -89,8 +90,9 @@
     <Property Name="Logout_Time" Type="time" Precision="7" />
     <Property Name="Reference_Id" Type="int" />
     <Property Name="Otp" Type="int" />
+    <Property Name="Attemp" Type="int" />
   </EntityType>
-  <Association Name="FK__Transacti__From___11D4A34F">
+  <Association Name="FK__Transacti__From___703EA55A">
     <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
@@ -125,7 +127,7 @@
     <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UsersAccount" EntityType="Self.UsersAccount" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Transacti__From___11D4A34F" Association="Self.FK__Transacti__From___11D4A34F">
+    <AssociationSet Name="FK__Transacti__From___703EA55A" Association="Self.FK__Transacti__From___703EA55A">
       <End Role="UsersAccount" EntitySet="UsersAccount" />
       <End Role="Transactions" EntitySet="Transactions" />
     </AssociationSet>

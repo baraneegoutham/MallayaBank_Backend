@@ -25,15 +25,18 @@ namespace Banking.Controllers
 
         }
 
-        public HttpResponseMessage GetRefId(int id)
+        public HttpResponseMessage Getstatement(int id)
         {
             using (BankingDbEntities db = new BankingDbEntities())
             {
-                var data = db.UsersAccounts.Where(a => a.Customer_Id == id).FirstOrDefault();
+                var data = (from p in db.UsersAccounts
+                            join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
+                            select new { p.Customer_Id, p.Account_Number, p.Customername, o.Account_type, p.Balance }).Where(a => a.Customer_Id == id).ToList();
+                //var data = db.UsersAccounts.Where(a => a.Customer_Id == id).First();
                 if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data.Reference_Id);
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
                 else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with Accountnumber= " + id + " not found");
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with customerid= " + id + " not found");
             }
 
         }
@@ -70,7 +73,9 @@ namespace Banking.Controllers
                         data.Otp = register.Otp;
                         data.Balance = register.Balance;
                         data.Register_Internet_Banking = "yes";
+                        data.Attemp = 3;
                         netbanking.Net_banking = "YES";
+
 
 
                         db.SaveChanges();
@@ -149,6 +154,7 @@ namespace Banking.Controllers
                     if (unlocked != null)
                     {
                         db.AccountLockeds.Remove(unlocked);
+                        data.Attemp = 3;
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, "Account unlocked");
                     }

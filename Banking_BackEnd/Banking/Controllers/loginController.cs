@@ -39,7 +39,12 @@ namespace Banking.Controllers
                 {
                     var iii = log.CustomerID;
                     string abcd = fetch(iii);
-                    if(abcd=="no")
+                    var cd = db.UsersAccounts.Where(a => a.Customer_Id == iii).First();
+                    if (cd.Attemp == 0)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Account is been locked");
+                    }
+                    if (abcd=="no")
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Account not yet approved");
                     var data = db.UsersAccounts.Where(a => a.Customer_Id == log.CustomerID).First();
                     var acc = db.AccountLockeds.ToList();
@@ -51,9 +56,13 @@ namespace Banking.Controllers
                         }
                     }
                     if (data.Login_Password == log.Password)
+                        
                         return Request.CreateResponse(HttpStatusCode.OK, "User " + data.Customername + " has logged in");
                     else
+                    {
+                        
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid user id " + log.CustomerID);
+                    }
 
 
                 }
@@ -83,5 +92,57 @@ namespace Banking.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Try fail");
             }
         }
+
+        public HttpResponseMessage PutupdateAttempt(int id)
+        {
+            try
+            {
+                using(BankingDbEntities db=new BankingDbEntities())
+                {
+                    var data = db.UsersAccounts.Where(a => a.Customer_Id == id).FirstOrDefault();
+                    data.Attemp = 3;
+                    db.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Try fail");
+            }
+        }
+
+        public HttpResponseMessage PutAttempt(int id)
+        {
+            try
+            {
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UsersAccounts.Where(a=>a.Customer_Id==id).FirstOrDefault();
+                    var dec = data.Attemp;
+                        
+                        
+                        if (dec == 0)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Account has been locked");
+                        }
+                    else
+                    {
+                        dec--;
+                        data.Attemp = dec;
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK,dec);
+                    }
+
+                        
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+
     }
 }
