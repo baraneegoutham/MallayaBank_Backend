@@ -13,7 +13,7 @@
     </Key>
     <Property Name="Admin_Id" Type="Int32" Nullable="false" />
     <Property Name="Password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Mobile_Number" Type="Int32" Nullable="false" />
+    <Property Name="Mobile_Number" Type="Int64" Nullable="false" />
     <Property Name="Email_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
   <EntityType Name="Beneficiary">
@@ -21,10 +21,10 @@
       <PropertyRef Name="beniid" />
     </Key>
     <Property Name="Beneficiary_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-    <Property Name="Beneficiary_Account_Number" Type="Int32" Nullable="false" />
-    <Property Name="Holder_Account_Number" Type="Int32" />
+    <Property Name="Beneficiary_Account_Number" Type="Int32" />
     <Property Name="Save_Status" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
     <Property Name="Nick_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Holder_Account_Number" Type="Int32" />
     <Property Name="beniid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
   </EntityType>
   <EntityType Name="Transaction">
@@ -34,12 +34,12 @@
     <Property Name="Transaction_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="From_Account_Number" Type="Int32" />
     <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="To_Account_Number" Type="Int32" />
+    <Property Name="To_Account_Number" Type="Int64" />
     <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Maturity_Instructions" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="Remark" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="Transaction_Date" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="UsersAccount" Relationship="Self.FK__Transacti__From___1FCDBCEB" FromRole="Transactions" ToRole="UsersAccount" />
+    <NavigationProperty Name="UsersAccount" Relationship="Self.FK__Transacti__From___11D4A34F" FromRole="Transactions" ToRole="UsersAccount" />
   </EntityType>
   <EntityType Name="UserDetail">
     <Key>
@@ -74,8 +74,7 @@
     <Property Name="Net_banking" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
     <Property Name="Account_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Approval_Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="same" Type="Boolean" />
-    <NavigationProperty Name="UsersAccounts" Relationship="Self.FK__UsersAcco__Refer__182C9B23" FromRole="UserDetails" ToRole="UsersAccount" />
+    <NavigationProperty Name="UsersAccounts" Relationship="Self.FK__UsersAcco__Refer__7073AF84" FromRole="UserDetails" ToRole="UsersAccount" />
   </EntityType>
   <EntityType Name="UsersAccount">
     <Key>
@@ -92,10 +91,10 @@
     <Property Name="Logout_Time" Type="Time" Precision="7" />
     <Property Name="Reference_Id" Type="Int32" />
     <Property Name="Otp" Type="Int32" />
-    <NavigationProperty Name="Transactions" Relationship="Self.FK__Transacti__From___1FCDBCEB" FromRole="UsersAccount" ToRole="Transactions" />
-    <NavigationProperty Name="UserDetail" Relationship="Self.FK__UsersAcco__Refer__182C9B23" FromRole="UsersAccount" ToRole="UserDetails" />
+    <NavigationProperty Name="Transactions" Relationship="Self.FK__Transacti__From___11D4A34F" FromRole="UsersAccount" ToRole="Transactions" />
+    <NavigationProperty Name="UserDetail" Relationship="Self.FK__UsersAcco__Refer__7073AF84" FromRole="UsersAccount" ToRole="UserDetails" />
   </EntityType>
-  <Association Name="FK__Transacti__From___1FCDBCEB">
+  <Association Name="FK__Transacti__From___11D4A34F">
     <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
@@ -109,7 +108,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__UsersAcco__Refer__182C9B23">
+  <Association Name="FK__UsersAcco__Refer__7073AF84">
     <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
@@ -130,11 +129,11 @@
     <EntitySet Name="Transactions" EntityType="Self.Transaction" />
     <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
     <EntitySet Name="UsersAccounts" EntityType="Self.UsersAccount" />
-    <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="Self.FK__Transacti__From___1FCDBCEB">
+    <AssociationSet Name="FK__Transacti__From___11D4A34F" Association="Self.FK__Transacti__From___11D4A34F">
       <End Role="UsersAccount" EntitySet="UsersAccounts" />
       <End Role="Transactions" EntitySet="Transactions" />
     </AssociationSet>
-    <AssociationSet Name="FK__UsersAcco__Refer__182C9B23" Association="Self.FK__UsersAcco__Refer__182C9B23">
+    <AssociationSet Name="FK__UsersAcco__Refer__7073AF84" Association="Self.FK__UsersAcco__Refer__7073AF84">
       <End Role="UserDetails" EntitySet="UserDetails" />
       <End Role="UsersAccount" EntitySet="UsersAccounts" />
     </AssociationSet>

@@ -47,7 +47,7 @@ namespace Banking.Controllers
                     {
                         if (i.Customer_Id == log.CustomerID)
                         {
-                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Account Locked " + log.CustomerID);
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Account Locked for " + log.CustomerID+"use forgot password  and set your new password to unlock your account");
                         }
                     }
                     if (data.Login_Password == log.Password)

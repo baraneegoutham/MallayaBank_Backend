@@ -13,7 +13,7 @@
     </Key>
     <Property Name="Admin_Id" Type="int" Nullable="false" />
     <Property Name="Password" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="Mobile_Number" Type="int" Nullable="false" />
+    <Property Name="Mobile_Number" Type="bigint" Nullable="false" />
     <Property Name="Email_Id" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Beneficiary">
@@ -21,10 +21,10 @@
       <PropertyRef Name="beniid" />
     </Key>
     <Property Name="Beneficiary_Name" Type="varchar" MaxLength="40" />
-    <Property Name="Beneficiary_Account_Number" Type="int" Nullable="false" />
-    <Property Name="Holder_Account_Number" Type="int" />
+    <Property Name="Beneficiary_Account_Number" Type="int" />
     <Property Name="Save_Status" Type="varchar" MaxLength="6" />
     <Property Name="Nick_Name" Type="varchar" MaxLength="30" />
+    <Property Name="Holder_Account_Number" Type="int" />
     <Property Name="beniid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
   <EntityType Name="Transactions">
@@ -34,7 +34,7 @@
     <Property Name="Transaction_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="From_Account_Number" Type="int" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="To_Account_Number" Type="int" />
+    <Property Name="To_Account_Number" Type="bigint" />
     <Property Name="Mode" Type="nvarchar" MaxLength="50" />
     <Property Name="Maturity_Instructions" Type="nvarchar" MaxLength="128" />
     <Property Name="Remark" Type="nvarchar" MaxLength="128" />
@@ -73,7 +73,6 @@
     <Property Name="Net_banking" Type="nvarchar" MaxLength="5" />
     <Property Name="Account_type" Type="nvarchar" MaxLength="50" />
     <Property Name="Approval_Status" Type="nvarchar" MaxLength="20" />
-    <Property Name="same" Type="bit" />
   </EntityType>
   <EntityType Name="UsersAccount">
     <Key>
@@ -91,7 +90,7 @@
     <Property Name="Reference_Id" Type="int" />
     <Property Name="Otp" Type="int" />
   </EntityType>
-  <Association Name="FK__Transacti__From___1FCDBCEB">
+  <Association Name="FK__Transacti__From___11D4A34F">
     <End Role="UsersAccount" Type="Self.UsersAccount" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
@@ -105,7 +104,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__UsersAcco__Refer__182C9B23">
+  <Association Name="FK__UsersAcco__Refer__7073AF84">
     <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
@@ -126,11 +125,11 @@
     <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UsersAccount" EntityType="Self.UsersAccount" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Transacti__From___1FCDBCEB" Association="Self.FK__Transacti__From___1FCDBCEB">
+    <AssociationSet Name="FK__Transacti__From___11D4A34F" Association="Self.FK__Transacti__From___11D4A34F">
       <End Role="UsersAccount" EntitySet="UsersAccount" />
       <End Role="Transactions" EntitySet="Transactions" />
     </AssociationSet>
-    <AssociationSet Name="FK__UsersAcco__Refer__182C9B23" Association="Self.FK__UsersAcco__Refer__182C9B23">
+    <AssociationSet Name="FK__UsersAcco__Refer__7073AF84" Association="Self.FK__UsersAcco__Refer__7073AF84">
       <End Role="UserDetails" EntitySet="UserDetails" />
       <End Role="UsersAccount" EntitySet="UsersAccount" />
     </AssociationSet>

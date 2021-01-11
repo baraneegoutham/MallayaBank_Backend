@@ -24,9 +24,9 @@
         <MappingFragment StoreEntitySet="Beneficiary">
           <ScalarProperty Name="Beneficiary_Name" ColumnName="Beneficiary_Name" />
           <ScalarProperty Name="Beneficiary_Account_Number" ColumnName="Beneficiary_Account_Number" />
-          <ScalarProperty Name="Holder_Account_Number" ColumnName="Holder_Account_Number" />
           <ScalarProperty Name="Save_Status" ColumnName="Save_Status" />
           <ScalarProperty Name="Nick_Name" ColumnName="Nick_Name" />
+          <ScalarProperty Name="Holder_Account_Number" ColumnName="Holder_Account_Number" />
           <ScalarProperty Name="beniid" ColumnName="beniid" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -77,7 +77,6 @@
           <ScalarProperty Name="Net_banking" ColumnName="Net_banking" />
           <ScalarProperty Name="Account_type" ColumnName="Account_type" />
           <ScalarProperty Name="Approval_Status" ColumnName="Approval_Status" />
-          <ScalarProperty Name="same" ColumnName="same" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -32,7 +32,7 @@ namespace Banking.Controllers
                 if (yesno == "yes")
                     return Request.CreateResponse(HttpStatusCode.OK, "YES");
                 else
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "NO");
+                    return Request.CreateResponse(HttpStatusCode.OK, "NO");
             }
 
         }

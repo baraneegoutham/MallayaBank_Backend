@@ -17,7 +17,7 @@ namespace Banking.Models
         public int Transaction_Id { get; set; }
         public Nullable<int> From_Account_Number { get; set; }
         public Nullable<decimal> Amount { get; set; }
-        public Nullable<int> To_Account_Number { get; set; }
+        public Nullable<long> To_Account_Number { get; set; }
         public string Mode { get; set; }
         public string Maturity_Instructions { get; set; }
         public string Remark { get; set; }

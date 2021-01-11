@@ -15,10 +15,10 @@ namespace Banking.Models
     public partial class Beneficiary
     {
         public string Beneficiary_Name { get; set; }
-        public int Beneficiary_Account_Number { get; set; }
-        public Nullable<int> Holder_Account_Number { get; set; }
+        public Nullable<int> Beneficiary_Account_Number { get; set; }
         public string Save_Status { get; set; }
         public string Nick_Name { get; set; }
+        public Nullable<int> Holder_Account_Number { get; set; }
         public int beniid { get; set; }
     }
 }

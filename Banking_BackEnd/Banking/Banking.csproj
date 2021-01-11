@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountlockedController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\benificiaryController.cs" />
     <Compile Include="Controllers\loginController.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Models\UserDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserDetailMetaData.cs" />
     <Compile Include="Models\UsersAccount.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
