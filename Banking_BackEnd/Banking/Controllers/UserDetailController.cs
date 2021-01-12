@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Banking.Models;
 using System.Web.Http.Cors;
+using System.Net.Mail;
 
 namespace Banking.Controllers
 {
@@ -241,6 +242,35 @@ namespace Banking.Controllers
                             if (details.Approval_Status == "yes")
                             {
                                 data.Approval_Status = details.Approval_Status;
+                                var data2 = db.UsersAccounts.Where(a => a.Reference_Id == id).FirstOrDefault();
+                                MailMessage mail = new MailMessage();
+                                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                                SmtpServer.Host = "smtp.gmail.com";
+                                var email = data.Email_Id;
+                                
+                                var account_number = data2.Account_Number;
+                                var customer_id = data2.Customer_Id;
+                                var password = data2.Login_Password;
+                                var customer_name = data2.Customername;
+
+
+                                mail.From = new MailAddress("deepikasr.1rn16ec189@gmail.com");
+                                mail.To.Add(email);
+                                mail.Subject = "Approval from LTI Bank";
+                                mail.Body = "Hi " + customer_name + "\n" + "Welcome to LTI BANK" + "\n" + "Account Number:"+account_number+"\n"+"Customer Id:"+customer_id+"\n"+"Password:"+password;
+                                
+
+                                //System.Net.Mail.Attachment attachment;
+                                //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
+                                //mail.Attachments.Add(attachment);
+
+                                SmtpServer.Port = 587;
+
+                                SmtpServer.UseDefaultCredentials = false;
+                                SmtpServer.Credentials = new System.Net.NetworkCredential("deepikasr.1rn16ec189@gmail.com", "deepcoll@1234");
+                                SmtpServer.EnableSsl = true;
+
+                                SmtpServer.Send(mail);
                             }
                         }
                         db.SaveChanges();

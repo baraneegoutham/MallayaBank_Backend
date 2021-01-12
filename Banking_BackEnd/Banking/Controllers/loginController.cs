@@ -7,6 +7,8 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using Banking.Models;
 
+
+
 namespace Banking.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -56,11 +58,13 @@ namespace Banking.Controllers
                         }
                     }
                     if (data.Login_Password == log.Password)
-                        
+                    {
+                       
                         return Request.CreateResponse(HttpStatusCode.OK, "User " + data.Customername + " has logged in");
+                    }
                     else
                     {
-                        
+
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid user id " + log.CustomerID);
                     }
 
