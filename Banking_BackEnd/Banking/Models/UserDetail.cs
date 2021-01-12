@@ -51,6 +51,6 @@ namespace Banking.Models
         public string Approval_Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<UsersAccount> UsersAccounts { get; set; }
+        public  ICollection<UsersAccount> UsersAccounts { get; set; }
     }
 }

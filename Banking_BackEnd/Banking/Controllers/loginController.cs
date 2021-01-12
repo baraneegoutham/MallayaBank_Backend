@@ -79,11 +79,18 @@ namespace Banking.Controllers
             {
                 using (BankingDbEntities db = new BankingDbEntities())
                 {
-                    AccountLocked a = new AccountLocked();
-                    a.Customer_Id = log.CustomerID;
-                    db.AccountLockeds.Add(a);
-                    db.SaveChanges();
-                    return Request.CreateResponse(HttpStatusCode.Created, "Account locked");
+                    var data = db.AccountLockeds.Where(a => a.Customer_Id == log.CustomerID).FirstOrDefault();
+                    if (data == null)
+                    {
+                        AccountLocked a = new AccountLocked();
+
+                        a.Customer_Id = log.CustomerID;
+
+                        db.AccountLockeds.Add(a);
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.Created, "Account locked");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
             }
 
@@ -140,6 +147,29 @@ namespace Banking.Controllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+        public HttpResponseMessage PostTrans([FromBody] login log)
+        {
+            try
+            {
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UsersAccounts.Where(a => a.Customer_Id == log.CustomerID).FirstOrDefault();
+                    if (data.Transaction_Password == log.Password)
+
+                        return Request.CreateResponse(HttpStatusCode.OK, "User " + data.Customername + " can proceed to make transaction");
+                    else
+                    {
+
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Transaction Password for the id -- " + log.CustomerID+"If you haven't set the transaction password Kindly register it");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "try fail");
             }
 
         }

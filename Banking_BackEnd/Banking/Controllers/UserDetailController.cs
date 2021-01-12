@@ -14,100 +14,172 @@ namespace Banking.Controllers
     {
         public HttpResponseMessage GetFetch(int id)
         {
-            using (BankingDbEntities ad = new BankingDbEntities())
+            try
             {
-                List<UserDetail> d = new List<UserDetail>();
-                var cd = ad.UsersAccounts.Where(a => a.Customer_Id == id).First();
-                var refid = cd.Reference_Id;
-                string yesno = "no";
-                var data = ad.UserDetails.Where(a => a.Net_banking == "YES");
-                foreach (var i in data)
+                using (BankingDbEntities ad = new BankingDbEntities())
                 {
-                    if (i.Reference_ID == refid)
+                    List<UserDetail> d = new List<UserDetail>();
+                    var cd = ad.UsersAccounts.Where(a => a.Customer_Id == id).First();
+                    var refid = cd.Reference_Id;
+                    string yesno = "no";
+                    var data = ad.UserDetails.Where(a => a.Net_banking == "YES");
+                    foreach (var i in data)
                     {
-                        yesno = "yes";
-                        break;
+                        if (i.Reference_ID == refid)
+                        {
+                            yesno = "yes";
+                            break;
+                        }
                     }
+                    if (yesno == "yes")
+                        return Request.CreateResponse(HttpStatusCode.OK, "YES");
+                    else
+                        return Request.CreateResponse(HttpStatusCode.OK, "NO");
                 }
-                if (yesno == "yes")
-                    return Request.CreateResponse(HttpStatusCode.OK, "YES");
-                else
-                    return Request.CreateResponse(HttpStatusCode.OK, "NO");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Customer Id"+id);
             }
 
         }
 
-        public HttpResponseMessage GetDetails()
+        public HttpResponseMessage GetaDetails()
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.UserDetails.Where(user => user.Approval_Status == "no").ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UserDetails.Where(user => user.Approval_Status == "no").ToList();
+                    if (data == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No Accounts Pending to be Approved");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+
             }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest,ex);
+
+            }
+ 
+        }
+
+        public HttpResponseMessage GetallDetails()
+        {
+            try
+            {
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UserDetails.ToList();
+                    if (data == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No Accounts Available");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
+            }
+
         }
 
         public HttpResponseMessage GetDetails(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.UserDetails.Find(id);
-                if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Userdetail with refid= " + id + " not found");
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UserDetails.Find(id);
+                    if (data != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Userdetail with refid= " + id + " not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
 
         }
 
         public HttpResponseMessage Getcredentials(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                //var data = (from p in db.UsersAccounts
-                //            join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
-                //            select new { p.Customer_Id, p.Account_Number, p.Login_Password}).Where(a => a.Customer_Id == id).ToList();
-                var data = (from p in db.UsersAccounts select new { p.Reference_Id, p.Customer_Id, p.Account_Number, p.Login_Password }).Where(a => a.Reference_Id == id).FirstOrDefault();
-                if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User Credentials for reference id = " + id + " not found");
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    //var data = (from p in db.UsersAccounts
+                    //            join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
+                    //            select new { p.Customer_Id, p.Account_Number, p.Login_Password}).Where(a => a.Customer_Id == id).ToList();
+                    var data = (from p in db.UsersAccounts select new { p.Reference_Id, p.Customer_Id, p.Account_Number, p.Login_Password }).Where(a => a.Reference_Id == id).FirstOrDefault();
+                    if (data != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User Credentials for reference id = " + id + " not found");
+                }
             }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
+            }
+
 
         }
 
         public HttpResponseMessage Getrefid()
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-
-                var data = db.UserDetails.Max(a=>a.Reference_ID);
- 
-                var result = db.UserDetails.Where(a => a.Reference_ID == data).FirstOrDefault();
-                if(result != null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK, result);
-
-                }
-                else
+                using (BankingDbEntities db = new BankingDbEntities())
                 {
 
-                    
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "cant find");
-                }
-                   
+                    var data = db.UserDetails.Max(a => a.Reference_ID);
 
+                    var result = db.UserDetails.Where(a => a.Reference_ID == data).FirstOrDefault();
+                    if (result != null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, result);
+
+                    }
+                    else
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Reference id not found");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
         public HttpResponseMessage GetRefernceid(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.UserDetails.Where(user => user.Aadhar_Number == id).FirstOrDefault();
-               
-                if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Userdetail with Aadharnumber= " + id + " not found");
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UserDetails.Where(user => user.Aadhar_Number == id).FirstOrDefault();
+
+                    if (data != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Userdetail with Aadharnumber= " + id + " not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
 
         }
@@ -171,6 +243,34 @@ namespace Banking.Controllers
                                 data.Approval_Status = details.Approval_Status;
                             }
                         }
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+        public HttpResponseMessage PutAdminEdit(int id, [FromBody] UserDetail details)
+        {
+            try
+            {
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UserDetails.Find(id);
+
+                    if (data == null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound, "Dept with id= " + id + " not found");
+                    }
+                    else
+                    {
+                        data.Net_banking = details.Net_banking;
+                        data.Debit_Card = details.Debit_Card;
+                        data.Account_type = details.Account_type;
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, data);
                     }

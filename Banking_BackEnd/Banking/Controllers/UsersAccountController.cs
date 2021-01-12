@@ -14,41 +14,67 @@ namespace Banking.Controllers
     {
         public HttpResponseMessage GetCustId(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.UsersAccounts.Find(id);
-                if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with Accountnumber= " + id + " not found");
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = (from p in db.UsersAccounts join o in db.UserDetails on p.Reference_Id equals o.Reference_ID select new { p.Account_Number, p.Customer_Id, p.Reference_Id, o.Mobile_Number, o.Email_Id }).Where(a => a.Account_Number == id).FirstOrDefault();
+                    if (data != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with Accountnumber= " + id + " not found");
+                }
             }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
 
         }
 
         public HttpResponseMessage Getstatement(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = (from p in db.UsersAccounts
-                            join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
-                            select new { p.Customer_Id, p.Account_Number, p.Customername, o.Account_type, p.Balance }).Where(a => a.Customer_Id == id).ToList();
-                //var data = db.UsersAccounts.Where(a => a.Customer_Id == id).First();
-                if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with customerid= " + id + " not found");
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = (from p in db.UsersAccounts
+                                join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
+                                select new { p.Customer_Id, p.Account_Number, p.Customername, o.Account_type, p.Balance }).Where(a => a.Customer_Id == id).ToList();
+                    //var data = db.UsersAccounts.Where(a => a.Customer_Id == id).First();
+                    if (data != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with customerid= " + id + " not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
 
         }
         public HttpResponseMessage GetSetnewPassword(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.UsersAccounts.Where(e => e.Customer_Id == id).FirstOrDefault();
-                if (data != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, data);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with Accountnumber= " + id + " not found");
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = (from p in db.UsersAccounts
+                                join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
+                                select new { p.Account_Number, p.Customer_Id, p.Reference_Id, o.Mobile_Number, o.Email_Id}).Where(a => a.Customer_Id == id).FirstOrDefault();
+                    if (data != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, data);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with Accountnumber= " + id + " not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
 
         }
@@ -64,20 +90,15 @@ namespace Banking.Controllers
 
                     if (data == null)
                     {
-                        return Request.CreateResponse(HttpStatusCode.NotFound, "Account number" + id + " not found");
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Account number" + id + " not found");
                     }
                     else
                     {
                         data.Login_Password = register.Login_Password;
                         data.Transaction_Password = register.Transaction_Password;
                         data.Otp = register.Otp;
-                        data.Balance = register.Balance;
                         data.Register_Internet_Banking = "yes";
                         data.Attemp = 3;
-                        netbanking.Net_banking = "YES";
-
-
-
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, data);
                     }
@@ -158,7 +179,7 @@ namespace Banking.Controllers
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, "Account unlocked");
                     }
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "Account has not been locked");
+                    return Request.CreateResponse(HttpStatusCode.OK,"Your Account is Safe");
                 }
             }
             catch (Exception ex)

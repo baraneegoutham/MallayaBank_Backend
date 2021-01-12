@@ -15,12 +15,14 @@ namespace Banking.Controllers
         
         public HttpResponseMessage GetUs(string id)
         {
-            var data = id.Split(',');
-            int acc = Convert.ToInt32(data[0]);
-            DateTime start = Convert.ToDateTime(data[1]);
-            DateTime finish = Convert.ToDateTime(data[2]);
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
+                var data = id.Split(',');
+                int acc = Convert.ToInt32(data[0]);
+                DateTime start = Convert.ToDateTime(data[1]);
+                DateTime finish = Convert.ToDateTime(data[2]);
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
 
                     var accounts = db.Transactions.Where(a => a.From_Account_Number == acc).ToList();
                     List<Transaction> t = new List<Transaction>();
@@ -30,55 +32,102 @@ namespace Banking.Controllers
                             t.Add(i);
                     }
                     return Request.CreateResponse(HttpStatusCode.OK, t);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
         }
 
         public HttpResponseMessage GetUser(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.UsersAccounts.Where(a => a.Customer_Id == id).First();
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UsersAccounts.Where(a => a.Customer_Id == id).First();
+                    if (data == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Customer Id"+id+"not found");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
         }
 
         public HttpResponseMessage GetTransaction(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.Transactions.Where(a => a.From_Account_Number == id).ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.Transactions.Where(a => a.From_Account_Number == id).ToList();
+                    if (data == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Account Number "+id+" Not found");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
             }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
+            }
+
         }
 
         public HttpResponseMessage GetLastTransaction(int id)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.Transactions.Where(a => a.From_Account_Number == id).ToList();
-                int last = data.Count();
-                return Request.CreateResponse(HttpStatusCode.OK, data[last - 1]);
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.Transactions.Where(a => a.From_Account_Number == id).ToList();
+                    int last = data.Count();
+                    return Request.CreateResponse(HttpStatusCode.OK, data[last - 1]);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
         }
 
         public HttpResponseMessage GetTransaction(int id, int tr)
         {
-            using (BankingDbEntities db = new BankingDbEntities())
+            try
             {
-                var data = db.Transactions.Where(a => a.From_Account_Number == id).ToList();
-                Transaction t = new Transaction();
-                foreach (var i in data)
+                using (BankingDbEntities db = new BankingDbEntities())
                 {
-                    if (i.Transaction_Id == tr)
+                    var data = db.Transactions.Where(a => a.From_Account_Number == id).ToList();
+                    Transaction t = new Transaction();
+                    foreach (var i in data)
                     {
-                        t = i;
-                        break;
+                        if (i.Transaction_Id == tr)
+                        {
+                            t = i;
+                            break;
+                        }
                     }
+                    if (t != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, t);
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Transaction with transactoin id= " + id + " not found");
                 }
-                if (t != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, t);
-                else
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Transaction with transactoin id= " + id + " not found");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
             }
         }
 
