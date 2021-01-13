@@ -26,9 +26,6 @@ namespace Banking.Models
         public string Login_Password { get; set; }
         public string Transaction_Password { get; set; }
         public Nullable<decimal> Balance { get; set; }
-        public string Register_Internet_Banking { get; set; }
-        public string Login_Status { get; set; }
-        public Nullable<System.TimeSpan> Logout_Time { get; set; }
         public Nullable<int> Reference_Id { get; set; }
         public Nullable<int> Otp { get; set; }
         public Nullable<int> Attemp { get; set; }

@@ -7,6 +7,10 @@ using System.Web.Http;
 using Banking.Models;
 using System.Web.Http.Cors;
 using System.Net.Mail;
+using System.Collections.Specialized;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Banking.Controllers
 {
@@ -104,7 +108,6 @@ namespace Banking.Controllers
                         data.Login_Password = register.Login_Password;
                         data.Transaction_Password = register.Transaction_Password;
                         data.Otp = register.Otp;
-                        data.Register_Internet_Banking = "yes";
                         data.Attemp = 3;
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, data);
@@ -226,6 +229,95 @@ namespace Banking.Controllers
                         SmtpServer.Send(mail);
                         return Request.CreateResponse(HttpStatusCode.OK, data);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+        public HttpResponseMessage Putuserid(int id)
+        {
+            try
+            {
+                using (BankingDbEntities db = new BankingDbEntities())
+                {
+                    var data = db.UsersAccounts.Find(id);
+                    var data2 = db.UserDetails.Where(a => a.Reference_ID == data.Reference_Id).FirstOrDefault();
+
+                    if (data == null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound, "Account number" + id + " not found");
+                    }
+                    else /*{*/
+                        //String result;
+                        // string apiKey = "9dP6FjSAjLE-0GIVLdQlv9vSlvCTRxZDLtmsM5cVjU";
+                        // string numbers = "09042883240"; // in a comma seperated list
+                        // string message = "This is your message";
+                        // string sender = "TXTLCL";
+
+                        // String url = "https://api.txtlocal.com/send/?apikey=" + apiKey + "&numbers=" + numbers + "&message=" + message + "&sender=" + sender;
+                        // //refer to parameters to complete correct url string
+
+                        // StreamWriter myWriter = null;
+                        // HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create(url);
+
+                        // objRequest.Method = "POST";
+                        // objRequest.ContentLength = Encoding.UTF8.GetByteCount(url);
+                        // objRequest.ContentType = "application/x-www-form-urlencoded";
+                        // try
+                        // {
+                        //     myWriter = new StreamWriter(objRequest.GetRequestStream());
+                        //     myWriter.Write(url);
+                        // }
+                        // catch (Exception e)
+                        // {
+                        //         MessageBox.Show(null, "the error is " + e, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // }
+                        // finally
+                        // {
+                        //     myWriter.Close();
+                        // }
+
+                        //// HttpWebResponse objResponse = (HttpWebResponse)objRequest.GetResponse();
+                        //// using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+                        //// {
+                        ////     result = sr.ReadToEnd();
+                        ////     // Close and clean up the StreamReader
+                        ////     sr.Close();
+
+                        ////}
+                        ////     MessageBox.Show(result);
+                        {
+                            MailMessage mail = new MailMessage();
+                            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                            SmtpServer.Host = "smtp.gmail.com";
+                            var email = data2.Email_Id;
+                            var mobilenumber = data2.Mobile_Number;
+                            var cust_name = data.Customername;
+                            var cust_id = data.Customer_Id;
+
+
+                            mail.From = new MailAddress("deepikasr.1rn16ec189@gmail.com");
+                            mail.To.Add(email);
+                            mail.Subject = "Forgot User Id Request";
+                            mail.Body = "Your User Name : " + cust_id;
+
+
+                            //System.Net.Mail.Attachment attachment;
+                            //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
+                            //mail.Attachments.Add(attachment);
+
+                            SmtpServer.Port = 587;
+
+                            SmtpServer.UseDefaultCredentials = false;
+                            SmtpServer.Credentials = new System.Net.NetworkCredential("deepikasr.1rn16ec189@gmail.com", "deepcoll@1234");
+                            SmtpServer.EnableSsl = true;
+
+                            SmtpServer.Send(mail);
+                            return Request.CreateResponse(HttpStatusCode.OK, data);
+                        }
                 }
             }
             catch (Exception ex)

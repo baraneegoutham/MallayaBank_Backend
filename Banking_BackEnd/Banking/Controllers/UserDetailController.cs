@@ -51,7 +51,7 @@ namespace Banking.Controllers
             {
                 using (BankingDbEntities db = new BankingDbEntities())
                 {
-                    var data = db.UserDetails.Where(user => user.Approval_Status == "no").ToList();
+                    var data =db.UserDetails.Where(user =>  user.Approval_Status == "no").Where(user=>user.Reject_Status=="no").ToList();
                     if (data == null)
                     {
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No Accounts Pending to be Approved");
@@ -112,30 +112,30 @@ namespace Banking.Controllers
 
         }
 
-        public HttpResponseMessage Getcredentials(int id)
-        {
-            try
-            {
-                using (BankingDbEntities db = new BankingDbEntities())
-                {
-                    //var data = (from p in db.UsersAccounts
-                    //            join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
-                    //            select new { p.Customer_Id, p.Account_Number, p.Login_Password}).Where(a => a.Customer_Id == id).ToList();
-                    var data = (from p in db.UsersAccounts select new { p.Reference_Id, p.Customer_Id, p.Account_Number, p.Login_Password }).Where(a => a.Reference_Id == id).FirstOrDefault();
-                    if (data != null)
-                        return Request.CreateResponse(HttpStatusCode.OK, data);
-                    else
-                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User Credentials for reference id = " + id + " not found");
-                }
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+        //public HttpResponseMessage Getcredentials(int id)
+        //{
+        //    try
+        //    {
+        //        using (BankingDbEntities db = new BankingDbEntities())
+        //        {
+        //            //var data = (from p in db.UsersAccounts
+        //            //            join o in db.UserDetails on p.Reference_Id equals o.Reference_ID
+        //            //            select new { p.Customer_Id, p.Account_Number, p.Login_Password}).Where(a => a.Customer_Id == id).ToList();
+        //            var data = (from p in db.UsersAccounts select new { p.Reference_Id, p.Customer_Id, p.Account_Number, p.Login_Password }).Where(a => a.Reference_Id == id).FirstOrDefault();
+        //            if (data != null)
+        //                return Request.CreateResponse(HttpStatusCode.OK, data);
+        //            else
+        //                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User Credentials for reference id = " + id + " not found");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
 
-            }
+        //    }
 
 
-        }
+        //}
 
         public HttpResponseMessage Getrefid()
         {
@@ -191,6 +191,7 @@ namespace Banking.Controllers
                 using (BankingDbEntities db = new BankingDbEntities())
                 {
                     detail.Approval_Status = "no";
+                    detail.Reject_Status = "no";
                     db.UserDetails.Add(detail);
                     db.SaveChanges();
 
@@ -237,6 +238,13 @@ namespace Banking.Controllers
                         data.Pincode = details.Pincode;
 
                         data.Gross_Annual_Income = details.Gross_Annual_Income;
+                        if (data.Reject_Status == "no")
+                        {
+                            if (details.Reject_Status == "Rejected")
+                            {
+                                data.Reject_Status = details.Reject_Status;
+                            }
+                        }
                         if (data.Approval_Status == "no")
                         {
                             if (details.Approval_Status == "yes")

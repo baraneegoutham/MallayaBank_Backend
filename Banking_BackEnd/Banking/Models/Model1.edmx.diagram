@@ -4,15 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="168619fee2864ac89fc2bffab99a7c8c" Name="Diagram1" ZoomLevel="78">
-        <EntityTypeShape EntityType="BankingDbModel.AccountLocked" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BankingDbModel.Admin" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BankingDbModel.Beneficiary" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="00c99af51ef14535aa707ff7404d8037" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="BankingDbModel.AccountLocked" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BankingDbModel.Admin" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BankingDbModel.Beneficiary" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BankingDbModel.Transaction" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BankingDbModel.UserDetail" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="BankingDbModel.UsersAccount" Width="1.5" PointX="3.125" PointY="1.25" IsExpanded="true" />
-        <AssociationConnector Association="BankingDbModel.FK__Transacti__From___703EA55A" ManuallyRouted="false" />
-        <AssociationConnector Association="BankingDbModel.FK__UsersAcco__Refer__7073AF84" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="BankingDbModel.UsersAccount" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <AssociationConnector Association="BankingDbModel.FK__Transacti__From___1293BD5E" ManuallyRouted="false" />
+        <AssociationConnector Association="BankingDbModel.FK__UsersAcco__Refer__0BE6BFCF" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

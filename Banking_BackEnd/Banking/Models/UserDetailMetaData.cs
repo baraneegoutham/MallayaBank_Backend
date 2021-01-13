@@ -17,7 +17,7 @@ namespace Banking.Models
         public string Email_Id { get; set; }
         public long Aadhar_Number { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode =true,DataFormatString ="{0:yyyy-MM-dd}")]
+        [DisplayFormat(ApplyFormatInEditMode =true,DataFormatString ="{yyyy-MM-dd}")]
         public System.DateTime Date_of_Birth { get; set; }
         public string Address_Line1 { get; set; }
         public string Address_Line2 { get; set; }
